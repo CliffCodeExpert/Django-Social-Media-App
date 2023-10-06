@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-header {
+            background-image: url('https://example.com/cover-photo.jpg'); /* Replace with the URL of the cover photo */
+            background-size: cover;
+            background-position: center;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 20px;
+        }
+
+        .profile-image img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            background-image: url('https://example.com/profile-image.jpg'); /* Replace with the URL of the profile image */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .follow-button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+        .unfollow-button {
+            background-color: #fd004d;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .follow-count {
+            font-size: 18px;
+            color: #333;
+            text-align: center;
+        }
+
+        .posts-section {
+            background-color: #fff;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .post {
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+        }
+
+        .post-content {
+            font-size: 16px;
+            color: #333;
+						text-align: center;
+        }
+				.post-content img{
+					width:50%;
+				}
+				.home{
+					padding-top:20px;
+					text-align:center;
+				}
+				.home a{
+					font-size: 23px;
+				}
+    </style>
+</head>
+<body>
+    <div class="home">
+			<a href="/">Home</a>
+		</div>
+    <div class="profile-header">
+        <div class="profile-image">
+					<img src="{{profile.profileimg.url}}" alt="">
+				</div>
+    </div>
+    <div class="profile-name">
+       <strong>{{profile.user.username|upper}}</strong>
+    </div>
+		<form action="" method="post">
+			{% csrf_token %} 
+			{% if profile != request.user.profile %}
+		{% if profile in request.user.profile.follows.all %}
+		<button class="unfollow-button" name="follow" value="unfollow">Unfollow</button>
+		{% else %}
+    <button class="follow-button" name="follow" value="follow">Follow</button>
+		{% endif %}
+		{% endif %}
+		</form>
+    <div class="follow-count">
+        <p><strong>{{profile.user.posts.count}}</strong> Posts</p>
+        <p><strong>{{profile.followed_by.all.count}}</strong> Followers</p>
+        <p><strong>{{profile.follows.all.count}}</strong> Following</p>
+    </div>
+
+    <section class="posts-section">
+			{% for post in profile.user.posts.all %}
+        <div class="post">
+            <div class="post-content">
+               <img src="{{post.image.url}}" alt="">
+            </div>
+        </div>
+				{% endfor %}
+        <!-- Add more posts here -->
+    </section>
+</body>
+</html>
